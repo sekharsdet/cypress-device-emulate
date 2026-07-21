@@ -12,14 +12,14 @@
     "responsive testing"
   ],
   "license": "MIT",
-  "author": "qesekhar",
-  "homepage": "https://github.com/qesekhar/cypress-device-emulate#readme",
+  "author": "Sekhar Uppari",
+  "homepage": "https://github.com/sekharsdet/cypress-device-emulate#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qesekhar/cypress-device-emulate.git"
+    "url": "git+https://github.com/sekharsdet/cypress-device-emulate.git"
   },
   "bugs": {
-    "url": "https://github.com/qesekhar/cypress-device-emulate/issues"
+    "url": "https://github.com/sekharsdet/cypress-device-emulate/issues"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

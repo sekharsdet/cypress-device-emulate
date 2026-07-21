@@ -14,7 +14,9 @@ security fixes.
 
 Please do **not** open a public GitHub issue for security vulnerabilities.
 
-Instead, email **qesekhar@gmail.com** with:
+Instead, use GitHub's private vulnerability reporting: go to the
+[Security tab](https://github.com/sekharsdet/cypress-device-emulate/security)
+on this repository and select "Report a vulnerability." Include:
 
 - A description of the vulnerability and its potential impact
 - Steps to reproduce (a minimal repro is ideal)
