@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Electron is Cypress's default browser (`cypress run` with no --browser
+        # flag) and has a materially different CDP surface than real Chrome — a
+        # real bug shipped once where a CDP command this library relies on
+        # (Browser.grantPermissions/resetPermissions) isn't supported in Electron
+        # at all and broke every single test's cleanup hook there, not just Chrome
+        # ones. Chrome-only CI would not have caught that.
+        browser: [chrome, electron]
+        # package.json declares "engines": { "node": ">=18" } — test the floor we
+        # actually claim, not just whatever happens to be on the dev machine.
+        node: [18, 20]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: node example-site/server.js &
+        shell: bash
+
+      # cypress-io/github-action installs Chrome's OS-level runtime deps (xvfb,
+      # libgtk, etc. on Linux) and drives the browser identically on all three
+      # platforms — this is what actually proves the CDP emulation recipe isn't
+      # Mac-specific, not just that the TypeScript compiles everywhere. The full
+      # ~166-device catalog-smoke spec only runs on Chrome (breadth check across
+      # every catalog entry is expensive to triple up); emulate.cy.js — which
+      # includes the cross-browser regression tests — runs on both browsers.
+      - uses: cypress-io/github-action@v6
+        with:
+          # Electron ships bundled with the cypress npm package and needs no
+          # separate install step — only Chrome does. This input is purely about
+          # what the action should pre-install, not what `command:` below runs;
+          # feeding it 'electron' (a value the action isn't installing for) is
+          # untested/ambiguous, so it's omitted for that leg instead.
+          browser: ${{ matrix.browser == 'chrome' && 'chrome' || '' }}
+          wait-on: 'http://localhost:4599'
+          command: npx cypress run --browser ${{ matrix.browser }} ${{ matrix.browser == 'electron' && '--spec cypress/e2e/emulate.cy.js' || '' }}

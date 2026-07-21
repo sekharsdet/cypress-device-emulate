@@ -1,0 +1,49 @@
+{
+  "name": "cypress-device-emulate",
+  "version": "0.1.0",
+  "description": "Mobile device emulation for Cypress — viewport, touch, device pixel ratio, user agent, and live orientation rotation, correctly cascading through CSS media queries. Chrome/Edge only.",
+  "keywords": [
+    "cypress",
+    "cypress-plugin",
+    "mobile",
+    "device emulation",
+    "viewport",
+    "touch",
+    "responsive testing"
+  ],
+  "license": "MIT",
+  "author": "qesekhar",
+  "homepage": "https://github.com/qesekhar/cypress-device-emulate#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qesekhar/cypress-device-emulate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qesekhar/cypress-device-emulate/issues"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "prepublishOnly": "npm run clean && npm run build",
+    "example:serve": "node example-site/server.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --browser chrome",
+    "test": "npm run build && start-server-and-test example:serve http://localhost:4599 cy:run"
+  },
+  "peerDependencies": {
+    "cypress": ">=12.0.0"
+  },
+  "devDependencies": {
+    "cypress": "^13.17.0",
+    "start-server-and-test": "^3.0.11",
+    "typescript": "^5.5.0"
+  }
+}
