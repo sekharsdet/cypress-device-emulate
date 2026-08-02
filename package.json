@@ -9,7 +9,13 @@
     "device emulation",
     "viewport",
     "touch",
-    "responsive testing"
+    "responsive testing",
+    "e2e-testing",
+    "test-automation",
+    "chrome-devtools-protocol",
+    "orientation",
+    "geolocation",
+    "qa-automation"
   ],
   "license": "MIT",
   "author": "Sekhar Uppari",

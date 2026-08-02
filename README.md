@@ -1,11 +1,26 @@
 # cypress-device-emulate
 
+[![npm version](https://img.shields.io/npm/v/cypress-device-emulate.svg)](https://www.npmjs.com/package/cypress-device-emulate)
+[![npm downloads](https://img.shields.io/npm/dw/cypress-device-emulate.svg)](https://www.npmjs.com/package/cypress-device-emulate)
+[![CI](https://github.com/sekharsdet/cypress-device-emulate/actions/workflows/ci.yml/badge.svg)](https://github.com/sekharsdet/cypress-device-emulate/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/cypress-device-emulate.svg)](./LICENSE)
+
 Mobile device emulation for Cypress. `cy.viewport()` only resizes the app under
 test — it does not flip `@media (hover: none)` or `@media (pointer: coarse)`,
 does not change `navigator.userAgent`, and does not expose the Touch API. This
 plugin sets all of that correctly, by driving the Chrome DevTools Protocol
 connection Cypress already has open — the same mechanism Chrome's own DevTools
 Device Mode is built on.
+
+| | `cy.viewport()` | `cy.emulate()` |
+| --- | --- | --- |
+| Resizes viewport | ✅ | ✅ |
+| `@media (hover: none)` / `(pointer: coarse)` | ❌ | ✅ |
+| `navigator.userAgent` | ❌ | ✅ |
+| Touch API (`ontouchstart`, `TouchEvent`) | ❌ | ✅ |
+| Device pixel ratio | ❌ | ✅ |
+| `screen.orientation` + live rotation | ❌ | ✅ (`cy.rotate()`) |
+| `locale` / `timezoneId` / `geolocation` | ❌ | ✅ |
 
 Chromium-based browsers only (Chrome, Edge, or Cypress's bundled Electron
 browser). Firefox dropped Chrome DevTools Protocol support, so it is not
