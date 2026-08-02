@@ -8,6 +8,14 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-02
+
+### Changed
+
+- README: added npm/CI/license badges and a `cy.viewport()` vs `cy.emulate()`
+  comparison table.
+- `package.json`: expanded `keywords` for better npm search discoverability.
+
 ## [0.1.0] - 2026-07-20
 
 ### Added
@@ -27,5 +35,6 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
   `DeviceDescriptor`.
 - Full TypeScript types for `DeviceDescriptor`, `DeviceName`, and `Geolocation`.
 
-[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/sekharsdet/cypress-device-emulate/releases/tag/v0.1.0
