@@ -8,6 +8,14 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-03
+
+### Added
+
+- README: demo GIF recorded from a real Cypress run, showing the login flow
+  across an iPhone 16 (portrait, then rotated live to landscape), a Galaxy
+  S25, and an iPad Pro 11.
+
 ## [0.1.1] - 2026-08-02
 
 ### Changed
@@ -35,6 +43,7 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
   `DeviceDescriptor`.
 - Full TypeScript types for `DeviceDescriptor`, `DeviceName`, and `Geolocation`.
 
-[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/sekharsdet/cypress-device-emulate/releases/tag/v0.1.0
