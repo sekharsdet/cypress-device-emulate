@@ -12,6 +12,8 @@ plugin sets all of that correctly, by driving the Chrome DevTools Protocol
 connection Cypress already has open — the same mechanism Chrome's own DevTools
 Device Mode is built on.
 
+![Cypress running the same login flow against an iPhone 16, a live landscape rotation, a Galaxy S25, and an iPad Pro 11](./media/demo.gif)
+
 | | `cy.viewport()` | `cy.emulate()` |
 | --- | --- | --- |
 | Resizes viewport | ✅ | ✅ |
