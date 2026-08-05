@@ -8,6 +8,19 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-08-05
+
+### Added
+
+- Sourcemaps (`.js.map`, `.d.ts.map`) shipped alongside compiled output, so
+  errors and debugging in consuming projects point back to the original
+  TypeScript source instead of compiled `dist/` output.
+- ESLint + Prettier tooling for contributors (`npm run lint`,
+  `npm run format`), enforced in CI as a job the test matrix depends on.
+- Dependabot config for automated npm and GitHub Actions dependency updates.
+- Tag-triggered release workflow (`npm publish --provenance` on `vX.Y.Z`
+  tags).
+
 ## [0.1.2] - 2026-08-03
 
 ### Added
@@ -43,7 +56,8 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
   `DeviceDescriptor`.
 - Full TypeScript types for `DeviceDescriptor`, `DeviceName`, and `Geolocation`.
 
-[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/sekharsdet/cypress-device-emulate/releases/tag/v0.1.0

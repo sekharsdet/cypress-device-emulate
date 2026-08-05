@@ -1,6 +1,6 @@
 {
   "name": "cypress-device-emulate",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Mobile device emulation for Cypress — viewport, touch, device pixel ratio, user agent, and live orientation rotation, correctly cascading through CSS media queries. Chrome/Edge only.",
   "keywords": [
     "cypress",
