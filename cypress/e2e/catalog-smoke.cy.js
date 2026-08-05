@@ -39,7 +39,8 @@ describe('cy.emulate catalog smoke test', () => {
         expect(win.matchMedia(`(max-width: ${expected.viewport.width}px)`).matches, 'max-width matches viewport').to.eq(
           true
         )
-        const expectedOrientation = expected.viewport.width > expected.viewport.height ? 'landscape-primary' : 'portrait-primary'
+        const expectedOrientation =
+          expected.viewport.width > expected.viewport.height ? 'landscape-primary' : 'portrait-primary'
         expect(win.screen.orientation.type, 'screen.orientation.type').to.eq(expectedOrientation)
       })
     })

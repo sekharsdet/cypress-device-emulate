@@ -5,10 +5,10 @@
 This project is pre-1.0. Only the latest published version on npm receives
 security fixes.
 
-| Version | Supported |
-| ------- | --------- |
-| latest 0.x | ✅ |
-| older 0.x  | ❌ |
+| Version    | Supported |
+| ---------- | --------- |
+| latest 0.x | ✅        |
+| older 0.x  | ❌        |
 
 ## Reporting a Vulnerability
 

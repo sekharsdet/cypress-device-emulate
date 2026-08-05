@@ -66,7 +66,7 @@ but worth knowing if you touch this code):
 - **`Emulation.setDeviceMetricsOverride` doesn't infer `screen.orientation` from
   width vs. height — you must pass `screenOrientation` explicitly.** Without it,
   Chrome defaults to `landscape-primary` regardless of the actual viewport shape —
-  verified a *portrait* device reporting `landscape-primary` before this was added.
+  verified a _portrait_ device reporting `landscape-primary` before this was added.
   `commands.ts`'s `screenOrientationFor()` derives the correct value from the
   viewport being applied; any new code path that calls
   `Emulation.setDeviceMetricsOverride` directly (rather than going through

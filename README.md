@@ -14,15 +14,15 @@ Device Mode is built on.
 
 ![Cypress running the same login flow against an iPhone 16, a live landscape rotation, a Galaxy S25, and an iPad Pro 11](./media/demo.gif)
 
-| | `cy.viewport()` | `cy.emulate()` |
-| --- | --- | --- |
-| Resizes viewport | ✅ | ✅ |
-| `@media (hover: none)` / `(pointer: coarse)` | ❌ | ✅ |
-| `navigator.userAgent` | ❌ | ✅ |
-| Touch API (`ontouchstart`, `TouchEvent`) | ❌ | ✅ |
-| Device pixel ratio | ❌ | ✅ |
-| `screen.orientation` + live rotation | ❌ | ✅ (`cy.rotate()`) |
-| `locale` / `timezoneId` / `geolocation` | ❌ | ✅ |
+|                                              | `cy.viewport()` | `cy.emulate()`     |
+| -------------------------------------------- | --------------- | ------------------ |
+| Resizes viewport                             | ✅              | ✅                 |
+| `@media (hover: none)` / `(pointer: coarse)` | ❌              | ✅                 |
+| `navigator.userAgent`                        | ❌              | ✅                 |
+| Touch API (`ontouchstart`, `TouchEvent`)     | ❌              | ✅                 |
+| Device pixel ratio                           | ❌              | ✅                 |
+| `screen.orientation` + live rotation         | ❌              | ✅ (`cy.rotate()`) |
+| `locale` / `timezoneId` / `geolocation`      | ❌              | ✅                 |
 
 Chromium-based browsers only (Chrome, Edge, or Cypress's bundled Electron
 browser). Firefox dropped Chrome DevTools Protocol support, so it is not
@@ -38,20 +38,20 @@ npm install --save-dev cypress-device-emulate
 Register the commands by adding this to `cypress/support/e2e.js`:
 
 ```js
-import "cypress-device-emulate";
+import 'cypress-device-emulate'
 ```
 
 ## Usage
 
 ```js
-it("logs in on a Galaxy S25 and opens the mobile menu", () => {
-  cy.emulate("Galaxy S25");
-  cy.visit("https://www.saucedemo.com/");
-  cy.get('[data-test="username"]').type("standard_user");
-  cy.get('[data-test="password"]').type("secret_sauce");
-  cy.get('[data-test="login-button"]').click();
-  cy.get('[data-test="open-menu"]').should("be.visible");
-});
+it('logs in on a Galaxy S25 and opens the mobile menu', () => {
+  cy.emulate('Galaxy S25')
+  cy.visit('https://www.saucedemo.com/')
+  cy.get('[data-test="username"]').type('standard_user')
+  cy.get('[data-test="password"]').type('secret_sauce')
+  cy.get('[data-test="login-button"]').click()
+  cy.get('[data-test="open-menu"]').should('be.visible')
+})
 ```
 
 ## API
@@ -63,8 +63,8 @@ and screen orientation, for a named device from the catalog or a custom
 descriptor.
 
 ```js
-cy.emulate("iPhone 16");
-cy.emulate(customDescriptor);
+cy.emulate('iPhone 16')
+cy.emulate(customDescriptor)
 ```
 
 Custom descriptor fields:
@@ -85,8 +85,8 @@ cy.emulate({
   deviceScaleFactor: 3,
   isMobile: true,
   hasTouch: true,
-  userAgent: "Mozilla/5.0 (Linux; Android 15; Pixel 9a) ...",
-});
+  userAgent: 'Mozilla/5.0 (Linux; Android 15; Pixel 9a) ...',
+})
 ```
 
 Every catalog entry also has a ` landscape` variant, e.g.
@@ -99,9 +99,9 @@ on an already-loaded page — viewport, user agent, device pixel ratio, and the
 does not flip until the page reloads:
 
 ```js
-cy.visit("/");
-cy.emulate("Pixel 9"); // viewport/UA/media-queries correct immediately
-cy.reload(); // needed only if your code checks 'ontouchstart' in window
+cy.visit('/')
+cy.emulate('Pixel 9') // viewport/UA/media-queries correct immediately
+cy.reload() // needed only if your code checks 'ontouchstart' in window
 ```
 
 ### cy.rotate(orientation)
@@ -111,8 +111,8 @@ event and updating `window.screen.orientation` — not just a resize. Requires
 `cy.emulate()` to have been called first in the same test.
 
 ```js
-cy.rotate("portrait");
-cy.rotate("landscape");
+cy.rotate('portrait')
+cy.rotate('landscape')
 ```
 
 For a named catalog device, this uses that device's real landscape/portrait
@@ -129,7 +129,7 @@ per-test, so without this a test that never calls `cy.emulate()` would inherit
 state left over from a previous test.
 
 ```js
-cy.resetEmulation();
+cy.resetEmulation()
 ```
 
 To manage resets yourself instead, disable the automatic hook:
@@ -138,13 +138,13 @@ To manage resets yourself instead, disable the automatic hook:
 // cypress.config.js
 module.exports = defineConfig({
   env: { cyDeviceEmulateAutoReset: false },
-});
+})
 ```
 
 ## Devices
 
 ```js
-import { devices } from "cypress-device-emulate";
+import { devices } from 'cypress-device-emulate'
 ```
 
 About 80 phones and tablets:

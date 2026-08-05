@@ -97,7 +97,7 @@ function applyDescriptor(descriptor: DeviceDescriptor) {
     // emulation is being turned off, so a non-touch custom descriptor (no catalog
     // entry currently sets hasTouch: false — this library is mobile-only) still
     // needs a valid placeholder here.
-    maxTouchPoints: descriptor.hasTouch ? descriptor.maxTouchPoints ?? 5 : 1,
+    maxTouchPoints: descriptor.hasTouch ? (descriptor.maxTouchPoints ?? 5) : 1,
   })
 
   sendCdpCommand('Emulation.setEmitTouchEventsForMouse', {
@@ -169,9 +169,7 @@ Cypress.Commands.add('rotate', (orientation: Orientation) => {
   assertChromiumFamily('cy.rotate')
 
   if (lastEmulatedDevice === null) {
-    throw new Error(
-      'cy-device-emulate: cy.rotate() requires cy.emulate() to have been called first in this test.'
-    )
+    throw new Error('cy-device-emulate: cy.rotate() requires cy.emulate() to have been called first in this test.')
   }
 
   let descriptor: DeviceDescriptor
@@ -199,9 +197,7 @@ Cypress.Commands.add('rotate', (orientation: Orientation) => {
     // Always computed from the ORIGINAL descriptor passed to emulate(), not the
     // current live viewport, so repeated cy.rotate() calls are idempotent rather
     // than drifting.
-    const [short, long] = [lastEmulatedDevice.viewport.width, lastEmulatedDevice.viewport.height].sort(
-      (a, b) => a - b
-    )
+    const [short, long] = [lastEmulatedDevice.viewport.width, lastEmulatedDevice.viewport.height].sort((a, b) => a - b)
     descriptor = {
       ...lastEmulatedDevice,
       viewport: orientation === 'portrait' ? { width: short, height: long } : { width: long, height: short },
