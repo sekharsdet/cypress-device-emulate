@@ -8,6 +8,8 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-23
+
 ### Added
 
 - `colorScheme`, `reducedMotion`, and `forcedColors` optional `DeviceDescriptor`
@@ -68,7 +70,8 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
   `DeviceDescriptor`.
 - Full TypeScript types for `DeviceDescriptor`, `DeviceName`, and `Geolocation`.
 
-[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/sekharsdet/cypress-device-emulate/compare/v0.1.0...v0.1.1
