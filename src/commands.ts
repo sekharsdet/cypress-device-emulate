@@ -51,7 +51,7 @@ function resolveDescriptor(device: string | DeviceDescriptor): DeviceDescriptor 
   return descriptor
 }
 
-function assertChromiumFamily(command: string): void {
+export function assertChromiumFamily(command: string): void {
   const family = Cypress.browser.family
   if (family !== 'chromium') {
     throw new Error(
@@ -121,6 +121,21 @@ function applyDescriptor(descriptor: DeviceDescriptor) {
 
   if (descriptor.timezoneId) {
     sendCdpCommand('Emulation.setTimezoneOverride', { timezoneId: descriptor.timezoneId })
+  }
+
+  const mediaFeatures: Array<{ name: string; value: string }> = []
+  if (descriptor.colorScheme) {
+    mediaFeatures.push({ name: 'prefers-color-scheme', value: descriptor.colorScheme })
+  }
+  if (descriptor.reducedMotion) {
+    mediaFeatures.push({ name: 'prefers-reduced-motion', value: descriptor.reducedMotion })
+  }
+  if (descriptor.forcedColors) {
+    mediaFeatures.push({ name: 'forced-colors', value: descriptor.forcedColors })
+  }
+
+  if (mediaFeatures.length > 0) {
+    sendCdpCommand('Emulation.setEmulatedMedia', { features: mediaFeatures })
   }
 
   if (descriptor.geolocation) {
@@ -243,6 +258,18 @@ Cypress.Commands.add('resetEmulation', () => {
   sendOptionalCdpCommand('Browser.resetPermissions', {})
   sendCdpCommand('Emulation.setLocaleOverride', {})
   sendCdpCommand('Emulation.setTimezoneOverride', { timezoneId: '' })
+  sendCdpCommand('Emulation.setEmulatedMedia', { features: [] })
+  // Also clears cy.throttleNetwork()/cy.throttleCpu() (see src/throttle.ts) — they
+  // aren't part of DeviceDescriptor, but this is the one place every override this
+  // library applies gets torn down, so they're reset here too rather than requiring
+  // a second afterEach hook.
+  sendCdpCommand('Network.emulateNetworkConditions', {
+    offline: false,
+    latency: 0,
+    downloadThroughput: -1,
+    uploadThroughput: -1,
+  })
+  sendCdpCommand('Emulation.setCPUThrottlingRate', { rate: 1 })
 
   return cy.viewport(Cypress.config('viewportWidth'), Cypress.config('viewportHeight'), { log: false })
 })

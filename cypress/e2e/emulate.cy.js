@@ -195,6 +195,66 @@ describe('cy.emulate', () => {
     })
   })
 
+  it('applies colorScheme, reducedMotion, and forcedColors overrides from a custom descriptor', () => {
+    // No catalog entry sets these fields, so this is the only runtime coverage
+    // for that part of the DeviceDescriptor -> CDP wiring in src/commands.ts.
+    cy.emulate({
+      viewport: { width: 400, height: 800 },
+      deviceScaleFactor: 2,
+      isMobile: true,
+      hasTouch: true,
+      userAgent: 'custom-agent-string',
+      colorScheme: 'dark',
+      reducedMotion: 'reduce',
+      forcedColors: 'active',
+    })
+    cy.visit('/')
+
+    cy.window().should((win) => {
+      expect(win.matchMedia('(prefers-color-scheme: dark)').matches).to.eq(true)
+      expect(win.matchMedia('(prefers-reduced-motion: reduce)').matches).to.eq(true)
+      expect(win.matchMedia('(forced-colors: active)').matches).to.eq(true)
+    })
+  })
+
+  it('clears colorScheme/reducedMotion/forcedColors overrides on reset', () => {
+    // Unlike locale/timezone (thousands of possible values, so 'fr-FR'/'Asia/Tokyo'
+    // can never collide with a real default), these three media features are
+    // binary/ternary and reflect a real OS-level setting once un-forced -- CI
+    // runners genuinely differ here (e.g. Windows/macOS runners were observed
+    // defaulting prefers-reduced-motion/forced-colors differently than Ubuntu's).
+    // So this captures each runner's actual baseline first, forces the OPPOSITE
+    // of it (guaranteeing a real, observable change), then asserts reset returns
+    // to that captured baseline rather than assuming a fixed universal default.
+    cy.visit('/')
+    cy.window().then((win) => {
+      const baseline = {
+        dark: win.matchMedia('(prefers-color-scheme: dark)').matches,
+        reduce: win.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        forced: win.matchMedia('(forced-colors: active)').matches,
+      }
+
+      cy.emulate({
+        viewport: { width: 400, height: 800 },
+        deviceScaleFactor: 2,
+        isMobile: true,
+        hasTouch: true,
+        userAgent: 'custom-agent-string',
+        colorScheme: baseline.dark ? 'light' : 'dark',
+        reducedMotion: baseline.reduce ? 'no-preference' : 'reduce',
+        forcedColors: baseline.forced ? 'none' : 'active',
+      })
+      cy.resetEmulation()
+      cy.visit('/')
+
+      cy.window().should((win2) => {
+        expect(win2.matchMedia('(prefers-color-scheme: dark)').matches).to.eq(baseline.dark)
+        expect(win2.matchMedia('(prefers-reduced-motion: reduce)').matches).to.eq(baseline.reduce)
+        expect(win2.matchMedia('(forced-colors: active)').matches).to.eq(baseline.forced)
+      })
+    })
+  })
+
   it('throws a clear, actionable error for an unknown device name', (done) => {
     cy.on('fail', (err) => {
       expect(err.message).to.include('unknown device')

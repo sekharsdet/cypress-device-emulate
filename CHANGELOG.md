@@ -8,6 +8,18 @@ it hasn't reached 1.0.0 yet, so breaking changes may land in a 0.x release).
 
 ## [Unreleased]
 
+### Added
+
+- `colorScheme`, `reducedMotion`, and `forcedColors` optional `DeviceDescriptor`
+  fields, wired through `Emulation.setEmulatedMedia` in `cy.emulate()` and
+  cleared by `cy.resetEmulation()`, for `prefers-color-scheme` /
+  `prefers-reduced-motion` / `forced-colors` testing.
+- `cy.throttleNetwork(preset | conditions)` and `cy.throttleCpu(rate)` — new
+  commands for network (`'offline'`, `'slow-3g'`, `'fast-3g'`, or a custom
+  conditions object) and CPU throttling via CDP, cleared automatically by
+  `cy.resetEmulation()`. Deliberately kept separate from `DeviceDescriptor`
+  since throttling is a test-environment condition, not a device property.
+
 ## [0.1.3] - 2026-08-05
 
 ### Added
