@@ -195,6 +195,49 @@ describe('cy.emulate', () => {
     })
   })
 
+  it('applies colorScheme, reducedMotion, and forcedColors overrides from a custom descriptor', () => {
+    // No catalog entry sets these fields, so this is the only runtime coverage
+    // for that part of the DeviceDescriptor -> CDP wiring in src/commands.ts.
+    cy.emulate({
+      viewport: { width: 400, height: 800 },
+      deviceScaleFactor: 2,
+      isMobile: true,
+      hasTouch: true,
+      userAgent: 'custom-agent-string',
+      colorScheme: 'dark',
+      reducedMotion: 'reduce',
+      forcedColors: 'active',
+    })
+    cy.visit('/')
+
+    cy.window().should((win) => {
+      expect(win.matchMedia('(prefers-color-scheme: dark)').matches).to.eq(true)
+      expect(win.matchMedia('(prefers-reduced-motion: reduce)').matches).to.eq(true)
+      expect(win.matchMedia('(forced-colors: active)').matches).to.eq(true)
+    })
+  })
+
+  it('clears colorScheme/reducedMotion/forcedColors overrides on reset', () => {
+    cy.emulate({
+      viewport: { width: 400, height: 800 },
+      deviceScaleFactor: 2,
+      isMobile: true,
+      hasTouch: true,
+      userAgent: 'custom-agent-string',
+      colorScheme: 'dark',
+      reducedMotion: 'reduce',
+      forcedColors: 'active',
+    })
+    cy.resetEmulation()
+    cy.visit('/')
+
+    cy.window().should((win) => {
+      expect(win.matchMedia('(prefers-color-scheme: dark)').matches).to.eq(false)
+      expect(win.matchMedia('(prefers-reduced-motion: reduce)').matches).to.eq(false)
+      expect(win.matchMedia('(forced-colors: active)').matches).to.eq(false)
+    })
+  })
+
   it('throws a clear, actionable error for an unknown device name', (done) => {
     cy.on('fail', (err) => {
       expect(err.message).to.include('unknown device')

@@ -1,4 +1,5 @@
 import './commands'
+import './throttle'
 
 /**
  * CDP emulation overrides are session-level in Chrome, not per-test — a test that

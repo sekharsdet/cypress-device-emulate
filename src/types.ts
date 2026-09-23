@@ -25,6 +25,12 @@ export interface DeviceDescriptor {
   locale?: string
   timezoneId?: string
   geolocation?: Geolocation
+  /** `prefers-color-scheme`. */
+  colorScheme?: 'light' | 'dark' | 'no-preference'
+  /** `prefers-reduced-motion`. */
+  reducedMotion?: 'reduce' | 'no-preference'
+  /** `forced-colors`. */
+  forcedColors?: 'active' | 'none'
 }
 
 export type DeviceName = string

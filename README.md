@@ -14,15 +14,16 @@ Device Mode is built on.
 
 ![Cypress running the same login flow against an iPhone 16, a live landscape rotation, a Galaxy S25, and an iPad Pro 11](./media/demo.gif)
 
-|                                              | `cy.viewport()` | `cy.emulate()`     |
-| -------------------------------------------- | --------------- | ------------------ |
-| Resizes viewport                             | ✅              | ✅                 |
-| `@media (hover: none)` / `(pointer: coarse)` | ❌              | ✅                 |
-| `navigator.userAgent`                        | ❌              | ✅                 |
-| Touch API (`ontouchstart`, `TouchEvent`)     | ❌              | ✅                 |
-| Device pixel ratio                           | ❌              | ✅                 |
-| `screen.orientation` + live rotation         | ❌              | ✅ (`cy.rotate()`) |
-| `locale` / `timezoneId` / `geolocation`      | ❌              | ✅                 |
+|                                                              | `cy.viewport()` | `cy.emulate()`     |
+| ------------------------------------------------------------ | --------------- | ------------------ |
+| Resizes viewport                                             | ✅              | ✅                 |
+| `@media (hover: none)` / `(pointer: coarse)`                 | ❌              | ✅                 |
+| `navigator.userAgent`                                        | ❌              | ✅                 |
+| Touch API (`ontouchstart`, `TouchEvent`)                     | ❌              | ✅                 |
+| Device pixel ratio                                           | ❌              | ✅                 |
+| `screen.orientation` + live rotation                         | ❌              | ✅ (`cy.rotate()`) |
+| `locale` / `timezoneId` / `geolocation`                      | ❌              | ✅                 |
+| `prefers-color-scheme` / `-reduced-motion` / `forced-colors` | ❌              | ✅                 |
 
 Chromium-based browsers only (Chrome, Edge, or Cypress's bundled Electron
 browser). Firefox dropped Chrome DevTools Protocol support, so it is not
@@ -78,6 +79,9 @@ Custom descriptor fields:
 - `Optional` **locale**: string
 - `Optional` **timezoneId**: string
 - `Optional` **geolocation**: `{ latitude: number, longitude: number, accuracy?: number }`, `accuracy` defaults to 1
+- `Optional` **colorScheme**: `'light' | 'dark' | 'no-preference'` — `prefers-color-scheme`
+- `Optional` **reducedMotion**: `'reduce' | 'no-preference'` — `prefers-reduced-motion`
+- `Optional` **forcedColors**: `'active' | 'none'` — `forced-colors`
 
 ```js
 cy.emulate({
@@ -141,6 +145,25 @@ module.exports = defineConfig({
 })
 ```
 
+### cy.throttleNetwork(conditions) / cy.throttleCpu(rate)
+
+Throttle network and CPU conditions for the current test, driving the same CDP
+connection as `cy.emulate()`. Deliberately **not** part of `DeviceDescriptor` —
+network/CPU conditions are a test-environment concern, not a device-identity
+property (a real iPhone isn't inherently "3G"), so these are separate commands
+rather than fields you'd pass to `cy.emulate()`.
+
+```js
+cy.throttleNetwork('slow-3g') // or 'fast-3g' / 'offline'
+cy.throttleNetwork({ offline: false, latency: 400, downloadThroughput: 50000, uploadThroughput: 50000 })
+
+cy.throttleCpu(4) // 4x slower than the host machine
+```
+
+Both are cleared automatically by `cy.resetEmulation()` (including the
+automatic per-test reset), the same as every other override this library
+applies.
+
 ## Devices
 
 ```js
@@ -180,6 +203,27 @@ works.
 Nothing in this library is platform-specific. CI runs on Ubuntu, Windows, and
 macOS, on both Node 18 and 20: the full ~186-test suite under real Chrome, plus
 the cross-browser regression tests under Electron.
+
+### What this is (and isn't) for
+
+This is a **layout-and-interaction correctness** tool for Chromium-based CI:
+does the responsive breakpoint switch, does `hover`/`pointer` branch the right
+UI, do touch handlers actually fire, does locale/timezone/geolocation-dependent
+logic take the right path. It solves problems that are otherwise genuinely
+painful with Cypress alone — headless Chrome silently reporting `pointer: none`
+when headed reports `pointer: fine` (breaking responsive components only in
+CI), Chrome's internal device-type detection flipping unpredictably even with
+an explicit desktop viewport set, and community workarounds like the
+`--blink-settings=primaryPointerType=4` launch flag breaking across Cypress
+versions with no replacement. `cy.emulate()` sets these deterministically,
+every run, regardless of headed/headless/CI environment.
+
+It is **not** a substitute for real-device testing (BrowserStack, Sauce Labs,
+LambdaTest, or an actual iPhone) when what you need is visual/rendering
+fidelity, true network/radio conditions, or Safari/WebKit-specific behavior —
+see the Chromium-only caveat above. Use this library for fast, deterministic
+layout/interaction regression coverage on every PR; reach for real devices or
+a device cloud periodically for cross-engine and visual verification.
 
 ## License
 
