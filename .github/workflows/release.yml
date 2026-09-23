@@ -19,7 +19,8 @@ jobs:
       # attestation that ties the published tarball back to this exact
       # workflow run and commit, viewable on the npm package page.
       id-token: write
-      contents: read
+      # contents: write is needed to create the GitHub Release below.
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -46,3 +47,22 @@ jobs:
       - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Extract CHANGELOG section for this version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          awk -v ver="## [$TAG_VERSION]" '
+            $0 ~ "^" ver { found=1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+
+      # Publishing a GitHub Release (not just a git tag) is what makes a
+      # version show up in the repo's Releases feed, watcher notifications,
+      # and the "Latest" badge — a pushed tag alone is invisible to all of
+      # that.
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body_path: release-notes.md
