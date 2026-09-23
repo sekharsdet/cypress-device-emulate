@@ -59,7 +59,7 @@ jobs:
       # ~166-device catalog-smoke spec only runs on Chrome (breadth check across
       # every catalog entry is expensive to triple up); emulate.cy.js — which
       # includes the cross-browser regression tests — runs on both browsers.
-      - uses: cypress-io/github-action@v6
+      - uses: cypress-io/github-action@v7
         with:
           # Electron ships bundled with the cypress npm package and needs no
           # separate install step — only Chrome does. This input is purely about
