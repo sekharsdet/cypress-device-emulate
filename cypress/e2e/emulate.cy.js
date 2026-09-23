@@ -218,23 +218,40 @@ describe('cy.emulate', () => {
   })
 
   it('clears colorScheme/reducedMotion/forcedColors overrides on reset', () => {
-    cy.emulate({
-      viewport: { width: 400, height: 800 },
-      deviceScaleFactor: 2,
-      isMobile: true,
-      hasTouch: true,
-      userAgent: 'custom-agent-string',
-      colorScheme: 'dark',
-      reducedMotion: 'reduce',
-      forcedColors: 'active',
-    })
-    cy.resetEmulation()
+    // Unlike locale/timezone (thousands of possible values, so 'fr-FR'/'Asia/Tokyo'
+    // can never collide with a real default), these three media features are
+    // binary/ternary and reflect a real OS-level setting once un-forced -- CI
+    // runners genuinely differ here (e.g. Windows/macOS runners were observed
+    // defaulting prefers-reduced-motion/forced-colors differently than Ubuntu's).
+    // So this captures each runner's actual baseline first, forces the OPPOSITE
+    // of it (guaranteeing a real, observable change), then asserts reset returns
+    // to that captured baseline rather than assuming a fixed universal default.
     cy.visit('/')
+    cy.window().then((win) => {
+      const baseline = {
+        dark: win.matchMedia('(prefers-color-scheme: dark)').matches,
+        reduce: win.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        forced: win.matchMedia('(forced-colors: active)').matches,
+      }
 
-    cy.window().should((win) => {
-      expect(win.matchMedia('(prefers-color-scheme: dark)').matches).to.eq(false)
-      expect(win.matchMedia('(prefers-reduced-motion: reduce)').matches).to.eq(false)
-      expect(win.matchMedia('(forced-colors: active)').matches).to.eq(false)
+      cy.emulate({
+        viewport: { width: 400, height: 800 },
+        deviceScaleFactor: 2,
+        isMobile: true,
+        hasTouch: true,
+        userAgent: 'custom-agent-string',
+        colorScheme: baseline.dark ? 'light' : 'dark',
+        reducedMotion: baseline.reduce ? 'no-preference' : 'reduce',
+        forcedColors: baseline.forced ? 'none' : 'active',
+      })
+      cy.resetEmulation()
+      cy.visit('/')
+
+      cy.window().should((win2) => {
+        expect(win2.matchMedia('(prefers-color-scheme: dark)').matches).to.eq(baseline.dark)
+        expect(win2.matchMedia('(prefers-reduced-motion: reduce)').matches).to.eq(baseline.reduce)
+        expect(win2.matchMedia('(forced-colors: active)').matches).to.eq(baseline.forced)
+      })
     })
   })
 
